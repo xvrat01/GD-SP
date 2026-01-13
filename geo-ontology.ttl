@@ -1,0 +1,979 @@
+@prefix : <http://example.org/geocaching#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@base <http://example.org/geocaching#> .
+
+<http://example.org/geocaching-ontology> rdf:type owl:Ontology ;
+                                          rdfs:label "Geocaching ontologie"@cs ,
+                                                     "Geocaching ontology"@en .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  https://schema.org/name
+schema:name rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://example.org/geocaching#additionalOwner
+:additionalOwner rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf schema:author ;
+                 rdfs:domain :GeoCache ;
+                 rdfs:range :Geocacher ;
+                 rdfs:label "additional owner"@en ,
+                            "vedlejší vlastník"@cs .
+
+
+###  http://example.org/geocaching#attributeType
+:attributeType rdf:type owl:ObjectProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain :CacheAttributeAssignment ;
+               rdfs:range :CacheAttributeType ;
+               rdfs:label "attribute type"@en ,
+                          "typ atributu"@cs .
+
+
+###  http://example.org/geocaching#cacheType
+:cacheType rdf:type owl:ObjectProperty ;
+           rdfs:domain :GeoCache ;
+           rdfs:range :CacheType ;
+           rdfs:label "cache type"@en ,
+                      "typ keše"@cs .
+
+
+###  http://example.org/geocaching#eventType
+:eventType rdf:type owl:ObjectProperty ;
+           rdfs:domain :GeoCache ;
+           rdfs:range :EventType ;
+           rdfs:label "event type"@en ,
+                      "typ eventu"@cs .
+
+
+###  http://example.org/geocaching#forCache
+:forCache rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf schema:about ;
+          rdf:type owl:FunctionalProperty ;
+          rdfs:domain :GeoCacheLog ;
+          rdfs:range :GeoCache ;
+          rdfs:label "for cache"@en ,
+                     "keš"@cs .
+
+
+###  http://example.org/geocaching#friendOf
+:friendOf rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf schema:knows ;
+          rdf:type owl:SymmetricProperty ,
+                   owl:IrreflexiveProperty ;
+          rdfs:domain :Geocacher ;
+          rdfs:range :Geocacher ;
+          rdfs:label "friend of"@en ,
+                     "přítel"@cs .
+
+
+###  http://example.org/geocaching#hasAttribute
+:hasAttribute rdf:type owl:ObjectProperty ;
+              rdfs:domain :GeoCache ;
+              rdfs:range :CacheAttributeAssignment ;
+              rdfs:label "has attribute"@en ,
+                         "má atribut"@cs .
+
+
+###  http://example.org/geocaching#hasWaypoint
+:hasWaypoint rdf:type owl:ObjectProperty ;
+             owl:inverseOf :waypointOf ;
+             rdfs:domain :GeoCache ;
+             rdfs:range :Waypoint ;
+             rdfs:label "has waypoint"@en ,
+                        "má waypoint"@cs .
+
+
+###  http://example.org/geocaching#host
+:host rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf schema:organizer ;
+      rdf:type owl:FunctionalProperty ;
+      rdfs:domain :GeoCache ;
+      rdfs:range :Geocacher ;
+      rdfs:label "host"@en ,
+                 "hostitel"@cs .
+
+
+###  http://example.org/geocaching#loggedBy
+:loggedBy rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf schema:author ;
+          rdf:type owl:FunctionalProperty ;
+          rdfs:domain :GeoCacheLog ;
+          rdfs:range :Geocacher ;
+          rdfs:label "autor logu"@cs ,
+                     "logged by"@en .
+
+
+###  http://example.org/geocaching#mainOwner
+:mainOwner rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf schema:author ;
+           rdf:type owl:FunctionalProperty ;
+           rdfs:domain :GeoCache ;
+           rdfs:range :Geocacher ;
+           rdfs:label "hlavní vlastník"@cs ,
+                      "main owner"@en .
+
+
+###  http://example.org/geocaching#waypointOf
+:waypointOf rdf:type owl:ObjectProperty ,
+                     owl:FunctionalProperty ;
+            rdfs:domain :Waypoint ;
+            rdfs:range :GeoCache ;
+            rdfs:label "patří ke keši"@cs ,
+                       "waypoint of"@en .
+
+
+###  http://example.org/geocaching#waypointType
+:waypointType rdf:type owl:ObjectProperty ;
+              rdfs:domain :Waypoint ;
+              rdfs:range :WaypointType ;
+              rdfs:label "typ waypointu"@cs ,
+                         "waypoint type"@en .
+
+
+###  https://schema.org/about
+schema:about rdf:type owl:ObjectProperty .
+
+
+###  https://schema.org/author
+schema:author rdf:type owl:ObjectProperty .
+
+
+###  https://schema.org/knows
+schema:knows rdf:type owl:ObjectProperty .
+
+
+###  https://schema.org/organizer
+schema:organizer rdf:type owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://example.org/geocaching#attributeState
+:attributeState rdf:type owl:DatatypeProperty ,
+                         owl:FunctionalProperty ;
+                rdfs:domain :CacheAttributeAssignment ;
+                rdfs:range xsd:boolean ;
+                rdfs:label "attribute state (positive/negative)"@en ,
+                           "stav atributu (pozitivní/negativní)"@cs .
+
+
+###  http://example.org/geocaching#difficulty
+:difficulty rdf:type owl:DatatypeProperty ;
+            rdfs:domain :GeoCache ;
+            rdfs:range xsd:decimal ;
+            rdfs:label "difficulty"@en ,
+                       "obtížnost"@cs .
+
+
+###  http://example.org/geocaching#isHidden
+:isHidden rdf:type owl:DatatypeProperty ;
+          rdfs:domain :Waypoint ;
+          rdfs:range xsd:boolean ;
+          rdfs:label "hidden"@en ,
+                     "skrytý"@cs .
+
+
+###  http://example.org/geocaching#isPhysicalLocation
+:isPhysicalLocation rdf:type owl:DatatypeProperty ;
+                    rdfs:domain :GeoCache ;
+                    rdfs:range xsd:boolean ;
+                    rdfs:label "is physical location"@en ,
+                               "je fyzické místo"@cs .
+
+
+###  http://example.org/geocaching#listing
+:listing rdf:type owl:DatatypeProperty ;
+         rdfs:domain :GeoCache ;
+         rdfs:range xsd:string ;
+         rdfs:label "listing"@cs ,
+                    "listing"@en .
+
+
+###  http://example.org/geocaching#status
+:status rdf:type owl:DatatypeProperty ;
+        rdfs:domain :GeoCache ;
+        rdfs:range xsd:string ;
+        rdfs:label "status"@en ,
+                   "stav"@cs .
+
+
+###  http://example.org/geocaching#terrain
+:terrain rdf:type owl:DatatypeProperty ;
+         rdfs:domain :GeoCache ;
+         rdfs:range xsd:decimal ;
+         rdfs:label "terrain"@en ,
+                    "terén"@cs .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://example.org/geocaching#CacheAttributeAssignment
+:CacheAttributeAssignment rdf:type owl:Class ;
+                          rdfs:subClassOf schema:PropertyValue ;
+                          rdfs:label "Cache attribute assignment"@en ,
+                                     "Přiřazení atributu keše"@cs .
+
+
+###  http://example.org/geocaching#CacheAttributeType
+:CacheAttributeType rdf:type owl:Class ;
+                    rdfs:subClassOf schema:DefinedTerm ;
+                    rdfs:label "Cache attribute type"@en ,
+                               "Typ atributu keše"@cs .
+
+
+###  http://example.org/geocaching#CacheType
+:CacheType rdf:type owl:Class ;
+           rdfs:subClassOf schema:DefinedTerm ;
+           rdfs:label "Cache type"@en ,
+                      "Typ keše"@cs .
+
+
+###  http://example.org/geocaching#EventType
+:EventType rdf:type owl:Class ;
+           rdfs:subClassOf schema:DefinedTerm ;
+           rdfs:label "Event type"@en ,
+                      "Typ eventu"@cs .
+
+
+###  http://example.org/geocaching#GeoCache
+:GeoCache rdf:type owl:Class ;
+          rdfs:subClassOf schema:Place ;
+          rdfs:label "Geocache"@en ,
+                     "Keš"@cs .
+
+
+###  http://example.org/geocaching#GeoCacheLog
+:GeoCacheLog rdf:type owl:Class ;
+             rdfs:subClassOf schema:Comment ;
+             rdfs:label "Geocache log"@en ,
+                        "Log keše"@cs .
+
+
+###  http://example.org/geocaching#Geocacher
+:Geocacher rdf:type owl:Class ;
+           rdfs:subClassOf schema:Person ;
+           rdfs:label "Geocacher"@cs ,
+                      "Geocacher"@en .
+
+
+###  http://example.org/geocaching#Waypoint
+:Waypoint rdf:type owl:Class ;
+          rdfs:subClassOf schema:Place ;
+          rdfs:label "Waypoint"@cs ,
+                     "Waypoint"@en .
+
+
+###  http://example.org/geocaching#WaypointType
+:WaypointType rdf:type owl:Class ;
+              rdfs:subClassOf schema:DefinedTerm ;
+              rdfs:label "Typ waypointu"@cs ,
+                         "Waypoint type"@en .
+
+
+###  https://schema.org/Comment
+schema:Comment rdf:type owl:Class .
+
+
+###  https://schema.org/DefinedTerm
+schema:DefinedTerm rdf:type owl:Class .
+
+
+###  https://schema.org/Person
+schema:Person rdf:type owl:Class .
+
+
+###  https://schema.org/Place
+schema:Place rdf:type owl:Class .
+
+
+###  https://schema.org/PropertyValue
+schema:PropertyValue rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://example.org/geocaching#AdventureLab
+:AdventureLab rdf:type owl:NamedIndividual ,
+                       :CacheType ;
+              schema:name "Adventure Lab®"@cs ,
+                          "Adventure Lab®"@en .
+
+
+###  http://example.org/geocaching#Attr_AbandonedMines
+:Attr_AbandonedMines rdf:type owl:NamedIndividual ,
+                              :CacheAttributeType ;
+                     schema:name "Opuštěné doly"@cs ,
+                                 "abandoned mines"@en .
+
+
+###  http://example.org/geocaching#Attr_AbandonedStructures
+:Attr_AbandonedStructures rdf:type owl:NamedIndividual ,
+                                   :CacheAttributeType ;
+                          schema:name "Opuštěné stavby"@cs ,
+                                      "abandoned structures"@en .
+
+
+###  http://example.org/geocaching#Attr_AvailableAnytime
+:Attr_AvailableAnytime rdf:type owl:NamedIndividual ,
+                                :CacheAttributeType ;
+                       schema:name "Přístupná kdykoliv"@cs ,
+                                   "available anytime"@en .
+
+
+###  http://example.org/geocaching#Attr_AvailableInWinter
+:Attr_AvailableInWinter rdf:type owl:NamedIndividual ,
+                                 :CacheAttributeType ;
+                        schema:name "Přístupná i v zimě"@cs ,
+                                    "available in winter"@en .
+
+
+###  http://example.org/geocaching#Attr_BicyclesAllowed
+:Attr_BicyclesAllowed rdf:type owl:NamedIndividual ,
+                               :CacheAttributeType ;
+                      schema:name "Přístupná na kole"@cs ,
+                                  "bicycles allowed"@en .
+
+
+###  http://example.org/geocaching#Attr_BoatRequired
+:Attr_BoatRequired rdf:type owl:NamedIndividual ,
+                            :CacheAttributeType ;
+                   schema:name "Přístup lodí"@cs ,
+                               "boat required"@en .
+
+
+###  http://example.org/geocaching#Attr_BonusCache
+:Attr_BonusCache rdf:type owl:NamedIndividual ,
+                          :CacheAttributeType ;
+                 schema:name "Bonusová keška"@cs ,
+                             "bonus cache"@en .
+
+
+###  http://example.org/geocaching#Attr_CampingAllowed
+:Attr_CampingAllowed rdf:type owl:NamedIndividual ,
+                              :CacheAttributeType ;
+                     schema:name "Povoleno tábořit"@cs ,
+                                 "camping allowed"@en .
+
+
+###  http://example.org/geocaching#Attr_CampingNearby
+:Attr_CampingNearby rdf:type owl:NamedIndividual ,
+                             :CacheAttributeType ;
+                    schema:name "Poblíž je kemp"@cs ,
+                                "camping nearby"@en .
+
+
+###  http://example.org/geocaching#Attr_ChallengeCache
+:Attr_ChallengeCache rdf:type owl:NamedIndividual ,
+                              :CacheAttributeType ;
+                     schema:name "Keška s výzvou"@cs ,
+                                 "challenge cache"@en .
+
+
+###  http://example.org/geocaching#Attr_CliffsOrFallingRocks
+:Attr_CliffsOrFallingRocks rdf:type owl:NamedIndividual ,
+                                    :CacheAttributeType ;
+                           schema:name "cliffs or falling rocks"@en ,
+                                       "Útesy / padající kameny"@cs .
+
+
+###  http://example.org/geocaching#Attr_ClimbingGearRequired
+:Attr_ClimbingGearRequired rdf:type owl:NamedIndividual ,
+                                    :CacheAttributeType ;
+                           schema:name "Nutná horolezecká výbava"@cs ,
+                                       "climbing gear required"@en .
+
+
+###  http://example.org/geocaching#Attr_CrossCountrySkis
+:Attr_CrossCountrySkis rdf:type owl:NamedIndividual ,
+                                :CacheAttributeType ;
+                       schema:name "Přístupná na běžkách"@cs ,
+                                   "cross-country skis"@en .
+
+
+###  http://example.org/geocaching#Attr_DangerArea
+:Attr_DangerArea rdf:type owl:NamedIndividual ,
+                          :CacheAttributeType ;
+                 schema:name "Nebezpečná oblast"@cs ,
+                             "danger area"@en .
+
+
+###  http://example.org/geocaching#Attr_DangerousAnimals
+:Attr_DangerousAnimals rdf:type owl:NamedIndividual ,
+                                :CacheAttributeType ;
+                       schema:name "Nebezpečná zvířata"@cs ,
+                                   "dangerous animals"@en .
+
+
+###  http://example.org/geocaching#Attr_DogsAllowed
+:Attr_DogsAllowed rdf:type owl:NamedIndividual ,
+                           :CacheAttributeType ;
+                  schema:name "Přístupná se psy"@cs ,
+                              "dogs allowed"@en .
+
+
+###  http://example.org/geocaching#Attr_DrinkingWaterNearby
+:Attr_DrinkingWaterNearby rdf:type owl:NamedIndividual ,
+                                   :CacheAttributeType ;
+                          schema:name "Blízký zdroj pitné vody"@cs ,
+                                      "drinking water nearby"@en .
+
+
+###  http://example.org/geocaching#Attr_FeeOrParkingFee
+:Attr_FeeOrParkingFee rdf:type owl:NamedIndividual ,
+                               :CacheAttributeType ;
+                      schema:name "Zpoplatněný vstup nebo parking"@cs ,
+                                  "fee or parking fee"@en .
+
+
+###  http://example.org/geocaching#Attr_FieldPuzzle
+:Attr_FieldPuzzle rdf:type owl:NamedIndividual ,
+                           :CacheAttributeType ;
+                  schema:name "Rébus řešený na místě"@cs ,
+                              "field puzzle"@en .
+
+
+###  http://example.org/geocaching#Attr_FlashlightRequired
+:Attr_FlashlightRequired rdf:type owl:NamedIndividual ,
+                                  :CacheAttributeType ;
+                         schema:name "Nutná svítilna"@cs ,
+                                     "flashlight required"@en .
+
+
+###  http://example.org/geocaching#Attr_FoodNearby
+:Attr_FoodNearby rdf:type owl:NamedIndividual ,
+                          :CacheAttributeType ;
+                 schema:name "Blízké občerstvení"@cs ,
+                             "food nearby"@en .
+
+
+###  http://example.org/geocaching#Attr_GasStationNearby
+:Attr_GasStationNearby rdf:type owl:NamedIndividual ,
+                                :CacheAttributeType ;
+                       schema:name "Blízká čerpací stanice"@cs ,
+                                   "gas station nearby"@en .
+
+
+###  http://example.org/geocaching#Attr_GeoTour
+:Attr_GeoTour rdf:type owl:NamedIndividual ,
+                       :CacheAttributeType ;
+              schema:name "GeoTour"@cs ,
+                          "GeoTour"@en .
+
+
+###  http://example.org/geocaching#Attr_HorsesAllowed
+:Attr_HorsesAllowed rdf:type owl:NamedIndividual ,
+                             :CacheAttributeType ;
+                    schema:name "Přístupná na koni"@cs ,
+                                "horses allowed"@en .
+
+
+###  http://example.org/geocaching#Attr_HuntingArea
+:Attr_HuntingArea rdf:type owl:NamedIndividual ,
+                           :CacheAttributeType ;
+                  schema:name "Oblast lovů"@cs ,
+                              "hunting area"@en .
+
+
+###  http://example.org/geocaching#Attr_KidFriendly
+:Attr_KidFriendly rdf:type owl:NamedIndividual ,
+                           :CacheAttributeType ;
+                  schema:name "Vhodná pro děti"@cs ,
+                              "kid friendly"@en .
+
+
+###  http://example.org/geocaching#Attr_LongHike
+:Attr_LongHike rdf:type owl:NamedIndividual ,
+                        :CacheAttributeType ;
+               schema:name "Dlouhý výšlap"@cs ,
+                           "long hike"@en .
+
+
+###  http://example.org/geocaching#Attr_LongTrail
+:Attr_LongTrail rdf:type owl:NamedIndividual ,
+                         :CacheAttributeType ;
+                schema:name "Dlouhá trasa (více než 10 km)"@cs ,
+                            "long trail (> 10 km)"@en .
+
+
+###  http://example.org/geocaching#Attr_LostAndFoundTour
+:Attr_LostAndFoundTour rdf:type owl:NamedIndividual ,
+                                :CacheAttributeType ;
+                       schema:name "Lost And Found Tour"@cs ,
+                                   "Lost and Found Tour"@en .
+
+
+###  http://example.org/geocaching#Attr_MayRequireSnowshoes
+:Attr_MayRequireSnowshoes rdf:type owl:NamedIndividual ,
+                                   :CacheAttributeType ;
+                          schema:name "Může vyžadovat sněžnice"@cs ,
+                                      "may require snowshoes"@en .
+
+
+###  http://example.org/geocaching#Attr_MayRequireSwimming
+:Attr_MayRequireSwimming rdf:type owl:NamedIndividual ,
+                                  :CacheAttributeType ;
+                         schema:name "Může vyžadovat plavání"@cs ,
+                                     "may require swimming"@en .
+
+
+###  http://example.org/geocaching#Attr_MayRequireWading
+:Attr_MayRequireWading rdf:type owl:NamedIndividual ,
+                                :CacheAttributeType ;
+                       schema:name "Může vyžadovat brodění"@cs ,
+                                   "may require wading"@en .
+
+
+###  http://example.org/geocaching#Attr_MediumTrail
+:Attr_MediumTrail rdf:type owl:NamedIndividual ,
+                           :CacheAttributeType ;
+                  schema:name "Střední trasa (1–10 km)"@cs ,
+                              "medium trail (1–10 km)"@en .
+
+
+###  http://example.org/geocaching#Attr_MotorcyclesAllowed
+:Attr_MotorcyclesAllowed rdf:type owl:NamedIndividual ,
+                                  :CacheAttributeType ;
+                         schema:name "Přístupná na motocyklu"@cs ,
+                                     "motorcycles allowed"@en .
+
+
+###  http://example.org/geocaching#Attr_NightCache
+:Attr_NightCache rdf:type owl:NamedIndividual ,
+                          :CacheAttributeType ;
+                 schema:name "Noční keška"@cs ,
+                             "night cache"@en .
+
+
+###  http://example.org/geocaching#Attr_OffroadVehiclesAllowed
+:Attr_OffroadVehiclesAllowed rdf:type owl:NamedIndividual ,
+                                      :CacheAttributeType ;
+                             schema:name "Přístupná terénním autem"@cs ,
+                                         "off-road vehicles allowed"@en .
+
+
+###  http://example.org/geocaching#Attr_OwnerAttentionRequired
+:Attr_OwnerAttentionRequired rdf:type owl:NamedIndividual ,
+                                      :CacheAttributeType ;
+                             schema:name "Vyžadována pozornost vlastníka keše"@cs ,
+                                         "owner attention required"@en .
+
+
+###  http://example.org/geocaching#Attr_ParkAndGrab
+:Attr_ParkAndGrab rdf:type owl:NamedIndividual ,
+                           :CacheAttributeType ;
+                  schema:name "Zaparkuj a odlov"@cs ,
+                              "park and grab"@en .
+
+
+###  http://example.org/geocaching#Attr_ParkingAvailable
+:Attr_ParkingAvailable rdf:type owl:NamedIndividual ,
+                                :CacheAttributeType ;
+                       schema:name "Možnost parkování"@cs ,
+                                   "parking available"@en .
+
+
+###  http://example.org/geocaching#Attr_PartnerCache
+:Attr_PartnerCache rdf:type owl:NamedIndividual ,
+                            :CacheAttributeType ;
+                   schema:name "Partnerská keška"@cs ,
+                               "partner cache"@en .
+
+
+###  http://example.org/geocaching#Attr_PhoneNearby
+:Attr_PhoneNearby rdf:type owl:NamedIndividual ,
+                           :CacheAttributeType ;
+                  schema:name "Blízká telefonní budka"@cs ,
+                              "telephone nearby"@en .
+
+
+###  http://example.org/geocaching#Attr_PicnicAreaNearby
+:Attr_PicnicAreaNearby rdf:type owl:NamedIndividual ,
+                                :CacheAttributeType ;
+                       schema:name "Blízké piknikové místo"@cs ,
+                                   "picnic area nearby"@en .
+
+
+###  http://example.org/geocaching#Attr_PoisonPlants
+:Attr_PoisonPlants rdf:type owl:NamedIndividual ,
+                            :CacheAttributeType ;
+                   schema:name "Jedovaté rostliny"@cs ,
+                               "poison plants"@en .
+
+
+###  http://example.org/geocaching#Attr_PowerTrail
+:Attr_PowerTrail rdf:type owl:NamedIndividual ,
+                          :CacheAttributeType ;
+                 schema:name "Power trail"@cs ,
+                             "power trail"@en .
+
+
+###  http://example.org/geocaching#Attr_PrivateProperty
+:Attr_PrivateProperty rdf:type owl:NamedIndividual ,
+                               :CacheAttributeType ;
+                      schema:name "Na soukromém pozemku"@cs ,
+                                  "private property"@en .
+
+
+###  http://example.org/geocaching#Attr_PublicRestroomNearby
+:Attr_PublicRestroomNearby rdf:type owl:NamedIndividual ,
+                                    :CacheAttributeType ;
+                           schema:name "Blízké veřejné WC"@cs ,
+                                       "public restroom nearby"@en .
+
+
+###  http://example.org/geocaching#Attr_PublicTransportAvailable
+:Attr_PublicTransportAvailable rdf:type owl:NamedIndividual ,
+                                        :CacheAttributeType ;
+                               schema:name "Přístupná veřejnou dopravou"@cs ,
+                                           "public transportation available"@en .
+
+
+###  http://example.org/geocaching#Attr_QuadsAllowed
+:Attr_QuadsAllowed rdf:type owl:NamedIndividual ,
+                            :CacheAttributeType ;
+                   schema:name "Přístupná na čtyřkolce"@cs ,
+                               "quads allowed"@en .
+
+
+###  http://example.org/geocaching#Attr_RadioBeacon
+:Attr_RadioBeacon rdf:type owl:NamedIndividual ,
+                           :CacheAttributeType ;
+                  schema:name "Radiomaják"@cs ,
+                              "radio beacon"@en .
+
+
+###  http://example.org/geocaching#Attr_RecommendedAtNight
+:Attr_RecommendedAtNight rdf:type owl:NamedIndividual ,
+                                  :CacheAttributeType ;
+                         schema:name "Doporučeno v noci"@cs ,
+                                     "recommended at night"@en .
+
+
+###  http://example.org/geocaching#Attr_ScenicView
+:Attr_ScenicView rdf:type owl:NamedIndividual ,
+                          :CacheAttributeType ;
+                 schema:name "Vyhlídka"@cs ,
+                             "scenic view"@en .
+
+
+###  http://example.org/geocaching#Attr_ScubaGearRequired
+:Attr_ScubaGearRequired rdf:type owl:NamedIndividual ,
+                                 :CacheAttributeType ;
+                        schema:name "Potápěčská výbava"@cs ,
+                                    "scuba gear required"@en .
+
+
+###  http://example.org/geocaching#Attr_SeasonalAccess
+:Attr_SeasonalAccess rdf:type owl:NamedIndividual ,
+                              :CacheAttributeType ;
+                     schema:name "Sezonní přístup"@cs ,
+                                 "seasonal access"@en .
+
+
+###  http://example.org/geocaching#Attr_ShortTrail
+:Attr_ShortTrail rdf:type owl:NamedIndividual ,
+                          :CacheAttributeType ;
+                 schema:name "Krátká trasa (méně než 1 km)"@cs ,
+                             "short trail (< 1 km)"@en .
+
+
+###  http://example.org/geocaching#Attr_SnowmobilesAllowed
+:Attr_SnowmobilesAllowed rdf:type owl:NamedIndividual ,
+                                  :CacheAttributeType ;
+                         schema:name "Přístupná na sněžném skútru"@cs ,
+                                     "snowmobiles allowed"@en .
+
+
+###  http://example.org/geocaching#Attr_SolutionChecker
+:Attr_SolutionChecker rdf:type owl:NamedIndividual ,
+                               :CacheAttributeType ;
+                      schema:name "Geocaching.com solution checker"@en ,
+                                  "Kontrola řešení Geocaching.com"@cs .
+
+
+###  http://example.org/geocaching#Attr_SpecialToolRequired
+:Attr_SpecialToolRequired rdf:type owl:NamedIndividual ,
+                                   :CacheAttributeType ;
+                          schema:name "Nutná speciální výbava"@cs ,
+                                      "special tool required"@en .
+
+
+###  http://example.org/geocaching#Attr_StealthRequired
+:Attr_StealthRequired rdf:type owl:NamedIndividual ,
+                               :CacheAttributeType ;
+                      schema:name "Nenápadné chování"@cs ,
+                                  "stealth required"@en .
+
+
+###  http://example.org/geocaching#Attr_StrenuousClimb
+:Attr_StrenuousClimb rdf:type owl:NamedIndividual ,
+                              :CacheAttributeType ;
+                     schema:name "Obtížný výstup"@cs ,
+                                 "strenuous climb"@en .
+
+
+###  http://example.org/geocaching#Attr_StrollerAccessible
+:Attr_StrollerAccessible rdf:type owl:NamedIndividual ,
+                                  :CacheAttributeType ;
+                         schema:name "Přístupná s kočárkem"@cs ,
+                                     "stroller accessible"@en .
+
+
+###  http://example.org/geocaching#Attr_TakesLessThanOneHour
+:Attr_TakesLessThanOneHour rdf:type owl:NamedIndividual ,
+                                    :CacheAttributeType ;
+                           schema:name "Zabere max. 1 hodinu"@cs ,
+                                       "takes less than one hour"@en .
+
+
+###  http://example.org/geocaching#Attr_TeamworkRequired
+:Attr_TeamworkRequired rdf:type owl:NamedIndividual ,
+                                :CacheAttributeType ;
+                       schema:name "Vyžaduje týmovou spolupráci"@cs ,
+                                   "teamwork required"@en .
+
+
+###  http://example.org/geocaching#Attr_Thorns
+:Attr_Thorns rdf:type owl:NamedIndividual ,
+                      :CacheAttributeType ;
+             schema:name "Trní"@cs ,
+                         "thorns"@en .
+
+
+###  http://example.org/geocaching#Attr_Ticks
+:Attr_Ticks rdf:type owl:NamedIndividual ,
+                     :CacheAttributeType ;
+            schema:name "Klíšťata"@cs ,
+                        "ticks"@en .
+
+
+###  http://example.org/geocaching#Attr_TouristAttraction
+:Attr_TouristAttraction rdf:type owl:NamedIndividual ,
+                                 :CacheAttributeType ;
+                        schema:name "Turisticky atraktivní"@cs ,
+                                    "tourist attraction"@en .
+
+
+###  http://example.org/geocaching#Attr_TrailersAllowed
+:Attr_TrailersAllowed rdf:type owl:NamedIndividual ,
+                               :CacheAttributeType ;
+                      schema:name "Přístupná s přívěsem"@cs ,
+                                  "trailers allowed"@en .
+
+
+###  http://example.org/geocaching#Attr_TreeClimbingRequired
+:Attr_TreeClimbingRequired rdf:type owl:NamedIndividual ,
+                                    :CacheAttributeType ;
+                           schema:name "Vyžaduje lezení po stromech"@cs ,
+                                       "tree climbing required"@en .
+
+
+###  http://example.org/geocaching#Attr_UVLightRequired
+:Attr_UVLightRequired rdf:type owl:NamedIndividual ,
+                               :CacheAttributeType ;
+                      schema:name "Nutné UV světlo"@cs ,
+                                  "UV light required"@en .
+
+
+###  http://example.org/geocaching#Attr_WatchForWildlife
+:Attr_WatchForWildlife rdf:type owl:NamedIndividual ,
+                                :CacheAttributeType ;
+                       schema:name "Pozor na zvěř"@cs ,
+                                   "watch for wildlife"@en .
+
+
+###  http://example.org/geocaching#Attr_WheelchairAccessible
+:Attr_WheelchairAccessible rdf:type owl:NamedIndividual ,
+                                    :CacheAttributeType ;
+                           schema:name "Vhodné pro vozíčkáře"@cs ,
+                                       "wheelchair accessible"@en .
+
+
+###  http://example.org/geocaching#CITOEvent
+:CITOEvent rdf:type owl:NamedIndividual ,
+                    :EventType ;
+           schema:name "Cache In Trash Out Event (CITO)"@cs ,
+                       "Cache In Trash Out Event (CITO)"@en .
+
+
+###  http://example.org/geocaching#CommunityCelebrationEvent
+:CommunityCelebrationEvent rdf:type owl:NamedIndividual ,
+                                    :EventType ;
+                           schema:name "Community Celebration Event"@cs ,
+                                       "Community Celebration Event"@en .
+
+
+###  http://example.org/geocaching#EarthCache
+:EarthCache rdf:type owl:NamedIndividual ,
+                     :CacheType ;
+            schema:name "earthcache"@en ,
+                        "earthkeš"@cs .
+
+
+###  http://example.org/geocaching#EventCache
+:EventCache rdf:type owl:NamedIndividual ,
+                     :CacheType ;
+            schema:name "event"@cs ,
+                        "event"@en .
+
+
+###  http://example.org/geocaching#FinalLocation
+:FinalLocation rdf:type owl:NamedIndividual ,
+                        :WaypointType ;
+               schema:name "final location"@en ,
+                           "finální souřadnice"@cs .
+
+
+###  http://example.org/geocaching#GeocachingHQCache
+:GeocachingHQCache rdf:type owl:NamedIndividual ,
+                            :CacheType ;
+                   schema:name "Geocaching HQ cache"@en ,
+                               "Geocaching HQ keška"@cs .
+
+
+###  http://example.org/geocaching#GigaEvent
+:GigaEvent rdf:type owl:NamedIndividual ,
+                    :EventType ;
+           schema:name "giga event"@cs ,
+                       "giga event"@en .
+
+
+###  http://example.org/geocaching#HQBlockParty
+:HQBlockParty rdf:type owl:NamedIndividual ,
+                       :EventType ;
+              schema:name "Geocaching HQ Block Party"@cs ,
+                          "Geocaching HQ Block Party"@en .
+
+
+###  http://example.org/geocaching#HQCelebration
+:HQCelebration rdf:type owl:NamedIndividual ,
+                        :EventType ;
+               schema:name "Geocaching HQ Celebration"@cs ,
+                           "Geocaching HQ Celebration"@en .
+
+
+###  http://example.org/geocaching#LetterboxHybrid
+:LetterboxHybrid rdf:type owl:NamedIndividual ,
+                          :CacheType ;
+                 schema:name "letterbox"@cs ,
+                             "letterbox hybrid"@en .
+
+
+###  http://example.org/geocaching#MazeExhibit
+:MazeExhibit rdf:type owl:NamedIndividual ,
+                      :EventType ;
+             schema:name "Maze Exhibit"@cs ,
+                         "Maze Exhibit"@en .
+
+
+###  http://example.org/geocaching#MegaEvent
+:MegaEvent rdf:type owl:NamedIndividual ,
+                    :EventType ;
+           schema:name "mega-event"@cs ,
+                       "mega-event"@en .
+
+
+###  http://example.org/geocaching#MultiCache
+:MultiCache rdf:type owl:NamedIndividual ,
+                     :CacheType ;
+            schema:name "multi-cache"@en ,
+                        "multikeš"@cs .
+
+
+###  http://example.org/geocaching#MysteryCache
+:MysteryCache rdf:type owl:NamedIndividual ,
+                       :CacheType ;
+              schema:name "mystery/puzzle cache"@en ,
+                          "mystery/puzzle keška"@cs .
+
+
+###  http://example.org/geocaching#ParkingArea
+:ParkingArea rdf:type owl:NamedIndividual ,
+                      :WaypointType ;
+             schema:name "parking area"@en ,
+                         "parkoviště"@cs .
+
+
+###  http://example.org/geocaching#PhysicalStageSoM
+:PhysicalStageSoM rdf:type owl:NamedIndividual ,
+                           :WaypointType ;
+                  schema:name "fyzická stage"@cs ,
+                              "physical stage"@en .
+
+
+###  http://example.org/geocaching#ReferencePoint
+:ReferencePoint rdf:type owl:NamedIndividual ,
+                         :WaypointType ;
+                schema:name "reference point"@en ,
+                            "referenční bod"@cs .
+
+
+###  http://example.org/geocaching#TraditionalCache
+:TraditionalCache rdf:type owl:NamedIndividual ,
+                           :CacheType ;
+                  schema:name "traditional cache"@en ,
+                              "tradiční keška"@cs .
+
+
+###  http://example.org/geocaching#TraditionalEvent
+:TraditionalEvent rdf:type owl:NamedIndividual ,
+                           :EventType ;
+                  schema:name "event"@cs ,
+                              "event"@en .
+
+
+###  http://example.org/geocaching#Trailhead
+:Trailhead rdf:type owl:NamedIndividual ,
+                    :WaypointType ;
+           schema:name "počátek trasy"@cs ,
+                       "trailhead (TH)"@en .
+
+
+###  http://example.org/geocaching#VirtualCache
+:VirtualCache rdf:type owl:NamedIndividual ,
+                       :CacheType ;
+              schema:name "virtual cache"@en ,
+                          "virtuální keška"@cs .
+
+
+###  http://example.org/geocaching#VirtualStage
+:VirtualStage rdf:type owl:NamedIndividual ,
+                       :WaypointType ;
+              schema:name "virtual stage"@en ,
+                          "virtuální stage"@cs .
+
+
+###  http://example.org/geocaching#WebcamCache
+:WebcamCache rdf:type owl:NamedIndividual ,
+                      :CacheType ;
+             schema:name "webcam cache"@en ,
+                         "webcam keška"@cs .
+
+
+###  http://example.org/geocaching#WherigoCache
+:WherigoCache rdf:type owl:NamedIndividual ,
+                       :CacheType ;
+              schema:name "wherigo"@cs ,
+                          "wherigo"@en .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi

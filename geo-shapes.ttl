@@ -1,0 +1,516 @@
+@prefix gc:      <http://example.org/geocaching#> .
+@prefix schema:  <https://schema.org/> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo:     <http://www.opengis.net/ont/geosparql#> .
+@prefix geof:    <http://www.opengis.net/def/function/geosparql/> .
+@prefix uom:     <http://www.opengis.net/def/uom/OGC/1.0/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+
+<http://example.org/geocaching-shacl/>
+  a owl:Ontology ;
+  owl:imports <http://example.org/geocaching-ontology> .
+
+############################
+# GEO COORDINATES
+############################
+
+gc:GeoCoordinatesShape a sh:NodeShape ;
+  sh:targetClass schema:GeoCoordinates ;
+  sh:property [
+    sh:path geo:asWKT ;
+    sh:datatype geo:wktLiteral ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:pattern "^POINT\\([-0-9.]+ [-0-9.]+\\)$" ;
+    sh:message "GeoCoordinates must define exactly one geo:asWKT value in POINT(lon lat) format."@en ;
+  ] .
+
+############################
+# ATTRIBUTE ASSIGNMENT SHAPE
+############################
+
+gc:CacheAttributeAssignmentShape a sh:NodeShape ;
+  sh:targetClass gc:CacheAttributeAssignment ;
+
+  sh:property [
+    sh:path gc:attributeType ;
+    sh:class gc:CacheAttributeType ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Each attribute assignment must define exactly one attribute type."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:attributeState ;
+    sh:datatype xsd:boolean ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Each attribute assignment must define exactly one boolean attribute state (true/false)."@en ;
+  ] .
+
+############################
+# GEOCACHE SHAPE
+############################
+
+gc:GeoCacheShape a sh:NodeShape ;
+  sh:targetClass gc:GeoCache ;
+  sh:nodeKind sh:IRI ;
+
+  sh:property [
+    sh:path gc:mainOwner ;
+    sh:class gc:Geocacher ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Every geocache must have exactly one main owner (gc:mainOwner)."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:additionalOwner ;
+    sh:class gc:Geocacher ;
+    sh:message "Additional owners (gc:additionalOwner) must be geocachers."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:cacheType ;
+    sh:class gc:CacheType ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Every geocache must have exactly one cache type."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:isPhysicalLocation ;
+    sh:datatype xsd:boolean ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Every geocache must specify whether its coordinates represent a physical location (gc:isPhysicalLocation)."@en ;
+  ] ;
+
+  sh:property [
+    sh:path schema:geo ;
+    sh:class schema:GeoCoordinates ;
+    sh:node gc:GeoCoordinatesShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Every geocache must have exactly one schema:geo value of type schema:GeoCoordinates (with geo:asWKT)."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:listing ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Every geocache must have a listing (gc:listing)."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:difficulty ;
+    sh:datatype xsd:decimal ;
+    sh:minInclusive 1.0 ;
+    sh:maxInclusive 5.0 ;
+    sh:minCount 1 ;
+    sh:message "Difficulty must be a decimal value between 1.0 and 5.0."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:terrain ;
+    sh:datatype xsd:decimal ;
+    sh:minInclusive 1.0 ;
+    sh:maxInclusive 5.0 ;
+    sh:minCount 1 ;
+    sh:message "Terrain must be a decimal value between 1.0 and 5.0."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:hasAttribute ;
+    sh:class gc:CacheAttributeAssignment ;
+    sh:node gc:CacheAttributeAssignmentShape ;
+    sh:message "If attributes are provided, each value must be a valid attribute assignment."@en ;
+  ] .
+
+############################
+# WAYPOINT SHAPE
+############################
+
+gc:WaypointShape a sh:NodeShape ;
+  sh:targetClass gc:Waypoint ;
+  sh:nodeKind sh:IRI ;
+
+  sh:property [
+    sh:path gc:waypointOf ;
+    sh:class gc:GeoCache ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Every waypoint must belong to exactly one geocache (gc:waypointOf)."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:waypointType ;
+    sh:class gc:WaypointType ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Every waypoint must have exactly one waypoint type (gc:WaypointType)."@en ;
+  ] ;
+
+  sh:property [
+    sh:path schema:geo ;
+    sh:class schema:GeoCoordinates ;
+    sh:node gc:GeoCoordinatesShape ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Every waypoint must have exactly one schema:geo value of type schema:GeoCoordinates (with geo:asWKT)."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:isHidden ;
+    sh:datatype xsd:boolean ;
+    sh:maxCount 1 ;
+    sh:message "gc:isHidden must be a boolean (at most one value)."@en ;
+  ] ;
+
+  sh:property [
+    sh:path schema:name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Waypoint must have a name (schema:name) and it must be a string."@en ;
+  ] ;
+
+  sh:property [
+    sh:path schema:description ;
+    sh:datatype xsd:string ;
+    sh:maxCount 1 ;
+    sh:message "Waypoint can have only 1 note (schema:description) maximum and it must be a string."@en ;
+  ] .
+
+############################
+# GEOCACHER SHAPE
+############################
+
+gc:GeocacherShape a sh:NodeShape ;
+  sh:targetClass gc:Geocacher ;
+  sh:nodeKind sh:IRI ;
+
+  sh:property [
+    sh:path schema:email ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:pattern ".+@.+\\..+" ;
+    sh:message "Every geocacher must have exactly one valid email address (schema:email)."@en ;
+  ] ;
+
+  sh:property [
+    sh:path schema:name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Every geocacher must have a name (schema:name)."@en ;
+  ] ;
+
+  sh:property [
+    sh:path schema:homeLocation ;
+    sh:class schema:Place ;
+    sh:maxCount 1 ;
+    sh:message "schema:homeLocation (if present) must be a schema:Place."@en ;
+  ] ;
+
+  sh:property [
+    sh:path ( schema:homeLocation schema:geo ) ;
+    sh:class schema:GeoCoordinates ;
+    sh:node gc:GeoCoordinatesShape ;
+    sh:maxCount 1 ;
+    sh:message "If homeLocation is provided, it must define schema:geo with valid geo:asWKT coordinates."@en ;
+  ] ;
+
+  sh:property [
+    sh:path gc:friendOf ;
+    sh:class gc:Geocacher ;
+    sh:message "Friends (gc:friendOf) must be geocachers."@en ;
+  ] .
+
+############################
+# Email + name UNIQUENESS
+############################
+
+gc:UniqueGeocacherEmailRule a sh:NodeShape ;
+  sh:targetClass gc:Geocacher ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "Geocacher email must be unique."@en ;
+    sh:select """
+      PREFIX schema: <https://schema.org/>
+      PREFIX gc: <http://example.org/geocaching#>
+      SELECT ?this WHERE {
+        ?this a gc:Geocacher ; schema:email ?e .
+        ?other a gc:Geocacher ; schema:email ?e .
+        FILTER(?other != ?this)
+        FILTER(STR(?this) < STR(?other))
+      }
+    """ ;
+  ] .
+
+gc:UniqueGeocacherNameRule a sh:NodeShape ;
+  sh:targetClass gc:Geocacher ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "Geocacher name must be unique (string-wise)."@en ;
+    sh:select """
+      PREFIX schema: <https://schema.org/>
+      PREFIX gc: <http://example.org/geocaching#>
+      SELECT ?this WHERE {
+        ?this a gc:Geocacher ; schema:name ?n .
+        ?other a gc:Geocacher ; schema:name ?n .
+        FILTER(?other != ?this)
+        FILTER(STR(?this) < STR(?other))
+      }
+    """ ;
+  ] .
+
+############################
+# UNIQUE ATTRIBUTE TYPE PER CACHE
+############################
+
+gc:UniqueAttributeTypePerCacheRule a sh:NodeShape ;
+  sh:targetClass gc:GeoCache ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "A geocache may not contain two attribute assignments with the same attribute type."@en ;
+    sh:select """
+      PREFIX gc: <http://example.org/geocaching#>
+      SELECT ?this WHERE {
+        ?this gc:hasAttribute ?a .
+        ?a gc:attributeType ?t .
+      }
+      GROUP BY ?this ?t
+      HAVING (COUNT(?a) > 1)
+    """ ;
+  ] .
+
+############################
+# EVENT CACHE RULES (CONDITIONAL)
+############################
+
+gc:EventCacheRules a sh:NodeShape ;
+  sh:targetClass gc:GeoCache ;
+
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "An event cache must define an event type (gc:eventType)."@en ;
+    sh:select """
+      PREFIX gc: <http://example.org/geocaching#>
+      SELECT ?this WHERE {
+        ?this gc:cacheType gc:EventCache .
+        FILTER NOT EXISTS { ?this gc:eventType ?t . }
+      }
+    """ ;
+  ] ;
+
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "An event cache must define a host (gc:host)."@en ;
+    sh:select """
+      PREFIX gc: <http://example.org/geocaching#>
+      SELECT ?this WHERE {
+        ?this gc:cacheType gc:EventCache .
+        FILTER NOT EXISTS { ?this gc:host ?h . }
+      }
+    """ ;
+  ] ;
+
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "An event cache must specify a start date (schema:startDate)."@en ;
+    sh:select """
+      PREFIX gc: <http://example.org/geocaching#>
+      PREFIX schema: <https://schema.org/>
+      SELECT ?this WHERE {
+        ?this gc:cacheType gc:EventCache .
+        FILTER NOT EXISTS { ?this schema:startDate ?d . }
+      }
+    """ ;
+  ] ;
+
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "An event cache must specify an end date (schema:endDate)."@en ;
+    sh:select """
+      PREFIX gc: <http://example.org/geocaching#>
+      PREFIX schema: <https://schema.org/>
+      SELECT ?this WHERE {
+        ?this gc:cacheType gc:EventCache .
+        FILTER NOT EXISTS { ?this schema:endDate ?d . }
+      }
+    """ ;
+  ] .
+
+############################
+# FINAL WAYPOINT RULES
+############################
+
+gc:FinalWaypointRule a sh:NodeShape ;
+  sh:targetClass gc:GeoCache ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "A geocache may have at most one final waypoint."@en ;
+    sh:select """
+      PREFIX gc: <http://example.org/geocaching#>
+      SELECT ?this WHERE {
+        ?this gc:hasWaypoint ?wp .
+        ?wp gc:waypointType gc:FinalWaypoint .
+      }
+      GROUP BY ?this
+      HAVING (COUNT(?wp) > 1)
+    """ ;
+  ] .
+
+gc:NonPhysicalCacheMustHaveFinalWaypointRule a sh:NodeShape ;
+  sh:targetClass gc:GeoCache ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "If a cache is not a physical location, it must have a final waypoint."@en ;
+    sh:select """
+      PREFIX gc: <http://example.org/geocaching#>
+      SELECT ?this WHERE {
+        ?this gc:isPhysicalLocation false .
+        FILTER NOT EXISTS {
+          ?this gc:hasWaypoint ?wp .
+          ?wp gc:waypointType gc:FinalLocation .
+        }
+      }
+    """ ;
+  ] .
+
+############################
+# 161m PROXIMITY RULE
+############################
+
+# gc:ProximityRule a sh:NodeShape ;
+#   sh:targetClass gc:GeoCache ;
+#   sh:sparql [
+#     a sh:SPARQLConstraint ;
+#     sh:message "Any physical location introduced by a cache (the cache itself if physical, and its physical waypoints) must not be within 161 meters of any other physical location (cache or waypoint)."@en ;
+#     sh:select """
+#       PREFIX gc: <http://example.org/geocaching#>
+#       PREFIX schema: <https://schema.org/>
+#       PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+#       PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+#       PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/>
+# 
+#       SELECT DISTINCT ?this WHERE {
+# 
+#         # P1 = this cache
+#         {
+#           ?this a gc:GeoCache ;
+#             gc:isPhysicalLocation true ;
+#             schema:geo ?g1.
+#           ?g1 geo:asWKT ?w1 .
+#           BIND(?this AS ?p1)
+#         }
+#         UNION
+#         {
+#           ?this a gc:GeoCache ;
+#           gc:hasWaypoint ?p1 .
+#           ?p1 a gc:Waypoint ;
+#               gc:waypointType ?wt1 ;
+#               schema:geo ?g1.
+#           ?g1 geo:asWKT ?w1 .
+#           VALUES ?wt1 { gc:FinalLocation gc:PhysicalStage }
+#         }
+# 
+#         # P2 = any physical location in dataset
+#         {
+#           ?p2 a gc:GeoCache ;
+#               gc:isPhysicalLocation true ;
+#               schema:geo ?g2.
+#           ?g2 geo:asWKT ?w2 .
+#         }
+#         UNION
+#         {
+#           ?p2 a gc:Waypoint ;
+#               gc:waypointType ?wt2 ;
+#               schema:geo ?g2.
+#           ?g2 geo:asWKT ?w2 .
+#           VALUES ?wt2 { gc:FinalLocation gc:PhysicalStage }
+#         }
+# 
+#         FILTER(?p2 != ?p1)
+#         FILTER(STR(?p1) < STR(?p2))
+# 
+#         BIND(geof:buffer(?w1, 161, uom:metre) AS ?buf)
+#         FILTER( geof:sfWithin(?w2, ?buf) )
+#       }
+#     """ ;
+#   ] .
+
+  
+gc:ProximityRule a sh:NodeShape ;
+  sh:targetClass gc:GeoCache ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "Any physical location introduced by a cache (the cache itself if physical, and its physical waypoints) must not be within 161 meters of any other physical location (cache or waypoint)."@en ;
+    sh:select """
+      PREFIX gc: <http://example.org/geocaching#>
+      PREFIX schema: <https://schema.org/>
+      PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+      PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+      SELECT DISTINCT $this WHERE {
+
+
+        {
+           $this a gc:GeoCache ;
+             gc:isPhysicalLocation true ;
+             schema:geo ?geo1.
+          ?geo1 geo:asWKT ?wkt1 .
+        }
+        UNION
+        {
+           $this gc:hasWaypoint ?wp1 .
+           ?wp1 gc:waypointType ?wt1 ;
+                schema:geo?geo1.
+           ?geo1 geo:asWKT ?wkt1 .
+           FILTER(?wt1 = gc:FinalLocation || ?wt1 = gc:PhysicalStage)
+        }
+
+
+        {
+           # other cache
+           ?otherCache a gc:GeoCache ;
+                       gc:isPhysicalLocation true ;
+                       schema:geo?geo2.
+          ?geo2 geo:asWKT ?wkt2 .
+        }
+        UNION
+        {
+           # other waypoint
+           ?wp2 a gc:Waypoint ;
+                gc:waypointType ?wt2 ;
+                gc:waypointOf ?otherCache ;
+                schema:geo?geo2.
+           ?geo2 geo:asWKT ?wkt2 .
+           FILTER(?wt2 = gc:FinalLocation || ?wt2 = gc:PhysicalStage)
+        }
+
+        
+        FILTER($this != ?otherCache)
+
+        BIND(xsd:decimal(STRBEFORE(STRAFTER(STR(?wkt1), "POINT("), " ")) AS ?lon1)
+        BIND(xsd:decimal(STRBEFORE(STRAFTER(STR(?wkt1), " "), ")")) AS ?lat1)
+
+        BIND(xsd:decimal(STRBEFORE(STRAFTER(STR(?wkt2), "POINT("), " ")) AS ?lon2)
+        BIND(xsd:decimal(STRBEFORE(STRAFTER(STR(?wkt2), " "), ")")) AS ?lat2)
+
+
+        # Approximate for ČR (50° s.š.): 1° lat = 111.1 km, 1° lon = 71.5 km
+        BIND(ABS(?lat1 - ?lat2) * 111139 AS ?dLat)
+        BIND(ABS(?lon1 - ?lon2) * 71500 AS ?dLon)
+
+        BIND((?dLat * ?dLat) + (?dLon * ?dLon) AS ?distSq)
+        
+        # 161^2 = 25921
+        FILTER(?distSq < 25921)
+      }
+    """ ;
+  ] .

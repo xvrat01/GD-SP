@@ -1,0 +1,180 @@
+@prefix : <http://example.org/geocaching-data#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://example.org/geocaching-data> .
+
+<http://example.org/geocaching-data> rdf:type owl:Ontology ;
+                                      owl:imports <http://example.org/geocaching-ontology> .
+
+
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://example.org/geocaching#StandardEvent
+<http://example.org/geocaching#StandardEvent> rdf:type owl:NamedIndividual .
+
+
+###  http://example.org/geocaching#alice
+<http://example.org/geocaching#alice> rdf:type owl:NamedIndividual ,
+                                               <http://example.org/geocaching#Geocacher> ;
+                                      <http://example.org/geocaching#friendOf> <http://example.org/geocaching#bob> ;
+                                      <https://schema.org/email> "alice@example.org" ;
+                                      <https://schema.org/homeLocation> [ rdf:type <https://schema.org/Place> ;
+                                                                          <https://schema.org/geo> [ rdf:type <https://schema.org/GeoCoordinates> ;
+                                                                                                     <http://www.opengis.net/ont/geosparql#asWKT> "POINT(16.6000 49.2000)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>
+                                                                                                   ] ;
+                                                                          <https://schema.org/name> "Domov"
+                                                                        ] ;
+                                      <https://schema.org/name> "AliceGC" .
+
+
+###  http://example.org/geocaching#bob
+<http://example.org/geocaching#bob> rdf:type owl:NamedIndividual ,
+                                             <http://example.org/geocaching#Geocacher> ;
+                                    <https://schema.org/email> "bob@example.org" ;
+                                    <https://schema.org/name> "Bobik" .
+
+
+###  http://example.org/geocaching#cache_1
+<http://example.org/geocaching#cache_1> rdf:type owl:NamedIndividual ,
+                                                 <http://example.org/geocaching#GeoCache> ;
+                                        <http://example.org/geocaching#additionalOwner> <http://example.org/geocaching#bob> ;
+                                        <http://example.org/geocaching#cacheType> <http://example.org/geocaching#TraditionalCache> ;
+                                        <http://example.org/geocaching#hasAttribute> _:genid3 ,
+                                                                                     _:genid4 ;
+                                        <http://example.org/geocaching#hasWaypoint> <http://example.org/geocaching#wp_parking_1> ;
+                                        <http://example.org/geocaching#mainOwner> <http://example.org/geocaching#alice> ;
+                                        <http://example.org/geocaching#difficulty> 2.0 ;
+                                        <http://example.org/geocaching#isPhysicalLocation> "true"^^xsd:boolean ;
+                                        <http://example.org/geocaching#listing> "GC12345 listing text" ;
+                                        <http://example.org/geocaching#status> "active" ;
+                                        <http://example.org/geocaching#terrain> 1.5 ;
+                                        <https://schema.org/geo> [ rdf:type <https://schema.org/GeoCoordinates> ;
+                                                                   <http://www.opengis.net/ont/geosparql#asWKT> "POINT(16.0000 49.0000)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>
+                                                                 ] ;
+                                        <https://schema.org/name> "Bridge micro cache" .
+
+_:genid3 rdf:type <http://example.org/geocaching#CacheAttributeAssignment> ;
+          <http://example.org/geocaching#attributeType> <http://example.org/geocaching#Attr_WheelchairAccessible> ;
+          <http://example.org/geocaching#attributeState> "true"^^xsd:boolean .
+
+_:genid4 rdf:type <http://example.org/geocaching#CacheAttributeAssignment> ;
+          <http://example.org/geocaching#attributeType> <http://example.org/geocaching#Attr_DogsAllowed> ;
+          <http://example.org/geocaching#attributeState> "true"^^xsd:boolean .
+
+
+###  http://example.org/geocaching#cache_2
+<http://example.org/geocaching#cache_2> rdf:type owl:NamedIndividual ,
+                                                 <http://example.org/geocaching#GeoCache> ;
+                                        <http://example.org/geocaching#additionalOwner> <http://example.org/geocaching#bob> ;
+                                        <http://example.org/geocaching#cacheType> <http://example.org/geocaching#TraditionalCache> ;
+                                        <http://example.org/geocaching#hasAttribute> _:genid6 ,
+                                                                                     _:genid7 ;
+                                        <http://example.org/geocaching#mainOwner> <http://example.org/geocaching#alice> ;
+                                        <http://example.org/geocaching#difficulty> 2.0 ;
+                                        <http://example.org/geocaching#isPhysicalLocation> "true"^^xsd:boolean ;
+                                        <http://example.org/geocaching#listing> "GC12345 listing text" ;
+                                        <http://example.org/geocaching#status> "active" ;
+                                        <http://example.org/geocaching#terrain> 1.5 ;
+                                        <https://schema.org/geo> [ rdf:type <https://schema.org/GeoCoordinates> ;
+                                                                   <http://www.opengis.net/ont/geosparql#asWKT> "POINT(16.0000 49.0000)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>
+                                                                 ] ;
+                                        <https://schema.org/name> "Bridge micro cache" .
+
+_:genid6 rdf:type <http://example.org/geocaching#CacheAttributeAssignment> ;
+          <http://example.org/geocaching#attributeType> <http://example.org/geocaching#Attr_WheelchairAccessible> ;
+          <http://example.org/geocaching#attributeState> "true"^^xsd:boolean .
+
+_:genid7 rdf:type <http://example.org/geocaching#CacheAttributeAssignment> ;
+          <http://example.org/geocaching#attributeType> <http://example.org/geocaching#Attr_DogsAllowed> ;
+          <http://example.org/geocaching#attributeState> "true"^^xsd:boolean .
+
+
+###  http://example.org/geocaching#cache_event_1
+<http://example.org/geocaching#cache_event_1> rdf:type owl:NamedIndividual ,
+                                                       <http://example.org/geocaching#GeoCache> ;
+                                              <http://example.org/geocaching#cacheType> <http://example.org/geocaching#EventCache> ;
+                                              <http://example.org/geocaching#eventType> <http://example.org/geocaching#StandardEvent> ;
+                                              <http://example.org/geocaching#hasAttribute> _:genid9 ;
+                                              <http://example.org/geocaching#hasWaypoint> <http://example.org/geocaching#wp_event_reference> ;
+                                              <http://example.org/geocaching#host> <http://example.org/geocaching#alice> ;
+                                              <http://example.org/geocaching#mainOwner> <http://example.org/geocaching#alice> ;
+                                              <http://example.org/geocaching#difficulty> 1.0 ;
+                                              <http://example.org/geocaching#isPhysicalLocation> "true"^^xsd:boolean ;
+                                              <http://example.org/geocaching#listing> "GC99999 listing text" ;
+                                              <http://example.org/geocaching#terrain> 1.0 ;
+                                              <https://schema.org/endDate> "2025-06-01T18:00:00"^^xsd:dateTime ;
+                                              <https://schema.org/geo> [ rdf:type <https://schema.org/GeoCoordinates> ;
+                                                                         <http://www.opengis.net/ont/geosparql#asWKT> "POINT(16.3000 49.3000)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>
+                                                                       ] ;
+                                              <https://schema.org/name> "Event u řeky" ;
+                                              <https://schema.org/startDate> "2025-06-01T15:00:00"^^xsd:dateTime .
+
+_:genid9 rdf:type <http://example.org/geocaching#CacheAttributeAssignment> ;
+          <http://example.org/geocaching#attributeType> <http://example.org/geocaching#Attr_FlashlightRequired> ;
+          <http://example.org/geocaching#attributeState> "false"^^xsd:boolean .
+
+
+###  http://example.org/geocaching#cache_mystery_1
+<http://example.org/geocaching#cache_mystery_1> rdf:type owl:NamedIndividual ,
+                                                         <http://example.org/geocaching#GeoCache> ;
+                                                <http://example.org/geocaching#cacheType> <http://example.org/geocaching#MysteryCache> ;
+                                                <http://example.org/geocaching#hasWaypoint> <http://example.org/geocaching#wp_mystery_final> ;
+                                                <http://example.org/geocaching#mainOwner> <http://example.org/geocaching#bob> ;
+                                                <http://example.org/geocaching#difficulty> 3.5 ;
+                                                <http://example.org/geocaching#isPhysicalLocation> "false"^^xsd:boolean ;
+                                                <http://example.org/geocaching#listing> "GC77777 listing text" ;
+                                                <http://example.org/geocaching#status> "active" ;
+                                                <http://example.org/geocaching#terrain> 2.0 ;
+                                                <https://schema.org/geo> [ rdf:type <https://schema.org/GeoCoordinates> ;
+                                                                           <http://www.opengis.net/ont/geosparql#asWKT> "POINT(16.7000 49.7000)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>
+                                                                         ] ;
+                                                <https://schema.org/name> "Night puzzle" .
+
+
+###  http://example.org/geocaching#wp_event_reference
+<http://example.org/geocaching#wp_event_reference> rdf:type owl:NamedIndividual ,
+                                                            <http://example.org/geocaching#Waypoint> ;
+                                                   <http://example.org/geocaching#waypointOf> <http://example.org/geocaching#cache_event_1> ;
+                                                   <http://example.org/geocaching#waypointType> <http://example.org/geocaching#ReferencePoint> ;
+                                                   <http://example.org/geocaching#isHidden> "false"^^xsd:boolean ;
+                                                   <https://schema.org/description> "Souřadnice místa setkání." ;
+                                                   <https://schema.org/geo> [ rdf:type <https://schema.org/GeoCoordinates> ;
+                                                                              <http://www.opengis.net/ont/geosparql#asWKT> "POINT(16.3100 49.3100)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>
+                                                                            ] ;
+                                                   <https://schema.org/name> "Místo setkání" .
+
+
+###  http://example.org/geocaching#wp_mystery_final
+<http://example.org/geocaching#wp_mystery_final> rdf:type owl:NamedIndividual ,
+                                                          <http://example.org/geocaching#Waypoint> ;
+                                                 <http://example.org/geocaching#waypointOf> <http://example.org/geocaching#cache_mystery_1> ;
+                                                 <http://example.org/geocaching#waypointType> <http://example.org/geocaching#FinalLocation> ;
+                                                 <http://example.org/geocaching#isHidden> "true"^^xsd:boolean ;
+                                                 <https://schema.org/description> "Hidden final; revealed after solving the puzzle." ;
+                                                 <https://schema.org/geo> [ rdf:type <https://schema.org/GeoCoordinates> ;
+                                                                            <http://www.opengis.net/ont/geosparql#asWKT> "POINT(16.7100 49.7100)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>
+                                                                          ] ;
+                                                 <https://schema.org/name> "Final coordinates" .
+
+
+###  http://example.org/geocaching#wp_parking_1
+<http://example.org/geocaching#wp_parking_1> rdf:type owl:NamedIndividual ,
+                                                      <http://example.org/geocaching#Waypoint> ;
+                                             <http://example.org/geocaching#waypointOf> <http://example.org/geocaching#cache_1> ;
+                                             <http://example.org/geocaching#waypointType> <http://example.org/geocaching#ParkingArea> ;
+                                             <http://example.org/geocaching#isHidden> "false"^^xsd:boolean ;
+                                             <https://schema.org/description> "Doporučené místo k zaparkování." ;
+                                             <https://schema.org/geo> [ rdf:type <https://schema.org/GeoCoordinates> ;
+                                                                        <http://www.opengis.net/ont/geosparql#asWKT> "POINT(16.0100 49.0100)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>
+                                                                      ] ;
+                                             <https://schema.org/name> "Parkoviště u mostu" .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
